@@ -4,6 +4,7 @@
   "description": "My NPM library",
   "main": "server.js",
   "dependencies": {
+    "@types/node": "^20.11.0",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.ts"
   },
   "keywords": [
     "Node",

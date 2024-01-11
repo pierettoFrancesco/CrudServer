@@ -56,6 +56,9 @@ $(document).ready(function() {
             });
             rq.catch(errore);
         });
+        $("<button>").addClass("btn btn-danger btn-sm").appendTo(divDettagli).text("ANNULLA").on("click",function(){
+            divDettagli.empty();
+        });
     });
 
 
@@ -133,7 +136,11 @@ $(document).ready(function() {
             }
             else{
                 delete response["data"]["_id"];
-                let textArea=$("<textarea>").appendTo(divDettagli).val(JSON.stringify(response["data"],null,3))
+                let textArea=$("<textarea>").appendTo(divDettagli);
+                if(method.toLocaleLowerCase() == "patch"){
+                    textArea.val(JSON.stringify({"$set": {"residenza" : "Fossano"}},null,3));                }
+                else
+                    textArea.val(JSON.stringify(response["data"],null,3))
                 textArea.css("height",textArea.get(0).scrollHeight+"px");
                 $("<button>").addClass("btn btn-success btn-sm").appendTo(divDettagli).text("AGGIORNA").on("click",function(){
                     let updatedRecord=divDettagli.children("textarea").val()
@@ -151,6 +158,9 @@ $(document).ready(function() {
                         getDataCollection(currentCollection);
                     });
                     rq.catch(errore);
+                });
+                $("<button>").addClass("btn btn-danger btn-sm").appendTo(divDettagli).text("ANNULLA").on("click",function(){
+                    divDettagli.empty();
                 });
             }
            

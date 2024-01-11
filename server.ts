@@ -10,11 +10,11 @@ _dotenv.config({"path":".env"});
 
 //Variabili relative a Mongo
 import {MongoClient, ObjectId} from "mongodb";
-const DBNAME ="unicorns";
+const DBNAME = process.env.DBNAME;
 const app = _express();
 const connectionString= process.env.connectionStringAtlas;
 //Variabili generiche
-const PORT:number = 1337;
+const PORT:number = parseInt(process.env.PORT);
 let paginaErrore;
 
 // La function di callback viene eseguita ogni volta che arriva una richiesta dal client
@@ -119,7 +119,14 @@ app.get("/api/:collection/:id",async (req:any, res:any, next:any) => {
     const client = new MongoClient(connectionString);
     await client.connect();
     let selectedCollection = req["params"]["collection"];
-    let objId = new ObjectId(req["params"]["id"]);
+    let id = req["params"]["id"];
+    let objId;
+    if(ObjectId.isValid(id)){
+        objId = new ObjectId(id);
+    }
+    else{
+        objId = id as unknown as ObjectId;
+    }
     let collection = client.db(DBNAME).collection(selectedCollection);
 
     let rq = collection.findOne({"_id":objId});
@@ -154,7 +161,14 @@ app.delete("/api/:collection/:id",async (req:any, res:any, next:any) => {
     const client = new MongoClient(connectionString);
     await client.connect();
     let selectedCollection = req["params"]["collection"];
-    let objId = new ObjectId(req["params"]["id"]);
+    let id = req["params"]["id"];
+    let objId;
+    if(ObjectId.isValid(id)){
+        objId = new ObjectId(id);
+    }
+    else{
+        objId = id as unknown as ObjectId;
+    }
     let collection = client.db(DBNAME).collection(selectedCollection);
 
     let rq = collection.deleteOne({"_id":objId});
@@ -187,11 +201,18 @@ app.patch("/api/:collection/:id",async (req:any, res:any, next:any) => {
     const client = new MongoClient(connectionString);
     await client.connect();
     let selectedCollection = req["params"]["collection"];
-    let objId = new ObjectId(req["params"]["id"]);
-    let updateRecord = req["body"];
+    let id = req["params"]["id"];
+    let objId;
+    if(ObjectId.isValid(id)){
+        objId = new ObjectId(id);
+    }
+    else{
+        objId = id as unknown as ObjectId;
+    }
+    let action = req["body"];
     let collection = client.db(DBNAME).collection(selectedCollection);
 
-    let rq = collection.updateOne({"_id":objId},{"$set":updateRecord});
+    let rq = collection.updateOne({"_id":objId},action);
     rq.then((data) => {
         res.send(data);
     });
@@ -201,7 +222,7 @@ app.patch("/api/:collection/:id",async (req:any, res:any, next:any) => {
     rq.finally(() => client.close());
 });
 
-app.patch("/api/:collection/:id",async (req:any, res:any, next:any) => {
+app.patch("/api/:collection",async (req:any, res:any, next:any) => {
     const client = new MongoClient(connectionString);
     await client.connect();
     let selectedCollection = req["params"]["collection"];
@@ -223,7 +244,14 @@ app.put("/api/:collection/:id",async (req:any, res:any, next:any) => {
     const client = new MongoClient(connectionString);
     await client.connect();
     let selectedCollection = req["params"]["collection"];
-    let objId = new ObjectId(req["params"]["id"]);
+    let id = req["params"]["id"];
+    let objId;
+    if(ObjectId.isValid(id)){
+        objId = new ObjectId(id);
+    }
+    else{
+        objId = id as unknown as ObjectId;
+    }
     let updateRecord = req["body"];
     let collection = client.db(DBNAME).collection(selectedCollection);
 
