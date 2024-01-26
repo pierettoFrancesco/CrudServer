@@ -68,13 +68,38 @@ app.use("/", (req:any, res:any, next:any) => {
 });
 
 //5 CORS (Controllo degli accessi)
+const whitelist = [
+    "http://pierettofrancesco-crudserver.onrender.com", //render
+    "https://pierettofrancesco-crudserver.onrender.com", // porta 443 (default)
+    "http://localhost:3000",
+    "https://localhost:3001",
+    "http://localhost:4200" // server angular
+   ];
+
 const corsOptions = {
+    origin: function(origin, callback) {
+    if (!origin) // browser direct call
+    return callback(null, true);
+    if (whitelist.indexOf(origin) === -1) {
+    var msg = `The CORS policy for this site does not
+    allow access from the specified Origin.`
+    return callback(new Error(msg), false);
+    }
+    else
+    return callback(null, true);
+    },
+    credentials: true
+};
+app.use("/", _cors(corsOptions));
+
+// Tramite questa procedura si accettano tutti
+/*const corsOptions = {
     origin: function(origin, callback) {
         return callback(null, true);
     },
     credentials: true
 };
-app.use("/", _cors(corsOptions));
+app.use("/", _cors(corsOptions));*/
 
 //********************************************************************************/
 // Routes utente
