@@ -69,7 +69,7 @@ app.use("/", (req:any, res:any, next:any) => {
 
 //5 CORS (Controllo degli accessi)
 const whitelist = [
-    "https://myrecipes-e09b7.web.app/recipes", //firebase
+    "https://myrecipes-e09b7.web.app", //firebase
     "http://pierettofrancesco-crudserver.onrender.com", //render
     "https://pierettofrancesco-crudserver.onrender.com", // porta 443 (default)
     "http://localhost:3000",
