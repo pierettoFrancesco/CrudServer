@@ -29,7 +29,7 @@ const DBNAME = process.env.DBNAME;
 const app = _express();
 const connectionString= process.env.connectionStringAtlas;
 //Variabili generiche
-const HTTP_PORT:number = parseInt(process.env.PORT);
+const HTTP_PORT:number = parseInt(process.env.PORT) || 4000;
 let paginaErrore;
 
 
