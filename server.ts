@@ -44,7 +44,7 @@ const ENCRYPTION_KEY = _fs.readFileSync('./keys/encryptionKey.txt', 'utf8')
 const http_server = _http.createServer(app);
 
 http_server.listen(HTTP_PORT, () => {
-    //init();
+    init();
     console.log(`Il Server HTTP è in ascolto sulla porta ${HTTP_PORT}`);
 });
 
