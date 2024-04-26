@@ -7,7 +7,6 @@ import _cors from "cors";
 import _nodemailer from "nodemailer";
 import _bcryptjs from "bcryptjs";
 import _jwt from "jsonwebtoken";
-import { google } from "googleapis";
 import _cloudinary, { UploadApiResponse } from "cloudinary";
 
 
@@ -98,14 +97,13 @@ const corsOptions = {
 };
 app.use("/", _cors(corsOptions));
 
-const o_Auth2= JSON.parse(process.env.oAuthCredential as any)
-const OAuth2 = google.auth.OAuth2; 
-const OAuth2Client = new OAuth2(
- o_Auth2["client_id"],
- o_Auth2["client_secret"]
-);
-OAuth2Client.setCredentials({
- refresh_token:o_Auth2.refresh_token,
+const auth = {
+    "user" : process.env.gmailUser,
+    "pass" : process.env.gmailPassword,
+}
+const transporter = _nodemailer.createTransport({
+    "service": "gmail",
+    "auth": auth
 });
 let message = _fs.readFileSync("./message.html","utf8");
 
@@ -276,36 +274,19 @@ app.get("/api/getUsers", async(req:any, res:any, next:any) => {
 })
 
 app.post("/api/recuperaPwd", async(req:any, res:any, next:any) => {
-    let username = "f.pieretto.2292@vallauri.edu";
     let mail = req.body.email;
     let passwordLength = 8;
     let randomPassword = generateRandomPassword(passwordLength);
 
     message = message.replace("__user", mail).replace("__password", randomPassword);
 
-    const accessToken = await OAuth2Client.getAccessToken().catch((err) => res.status(500).send("Errore richiesta access token a Google " + err)); //restituisce una promise
-    console.log(accessToken);
     
-    const auth = {
-        "type":"OAuth2",
-        "user":username, 
-        "clientId":o_Auth2.client_id,
-        "clientSecret":o_Auth2.client_secret,
-        "refreshToken":o_Auth2.refresh_token,
-        "accessToken":accessToken
-    }
-    const transporter = _nodemailer.createTransport({
-        "service": "gmail",
-        "auth": auth,
-        "tls": {
-            "rejectUnauthorized": false
-        }
-    });
+    
     let mailOptions ={
         "from": auth.user, 
-        "to":mail,
+        "to": mail,
         "subject": "Nuova password di accesso",
-        "html": message,
+        "html": message, 
     }
     transporter.sendMail(mailOptions,function(err, info){
         if(err){
