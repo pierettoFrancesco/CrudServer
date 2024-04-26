@@ -28,7 +28,7 @@ const server = _http.createServer((app));
 // se non viene specificato su tutte le interfacce
 
 server.listen(PORT, () => {
-    init();
+    //init();
     console.log(`Il Server è in ascolto sulla porta ${PORT}`)
 });
 
