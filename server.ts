@@ -4,7 +4,11 @@ import _fs from "fs";
 import _express from "express";
 import _dotenv from "dotenv";
 import _cors from "cors";
-
+import _nodemailer from "nodemailer";
+import _bcryptjs from "bcryptjs";
+import _jwt from "jsonwebtoken";
+import {google} from "googleapis";
+import _cloudinary, {UploadApiResponse} from "cloudinary";
 //letture Environment
 _dotenv.config({"path":".env"});
 
