@@ -115,7 +115,7 @@ app.post("/api/login", async (req:any, res:any) => {
     let regex = new RegExp("^"+username+"$", "i");
     let rq = collection.findOne({"username":regex, "admin" : admin}, {"projection" : {"username":1, "password":1}});
     rq.then((dbUser:any)=>{
-        console.log(dbUser);
+        
         if(!dbUser){
             res.status(401).send("Credenziali non valide");
         }
@@ -155,7 +155,7 @@ function creaToken(data){
         "exp" : currentDate + parseInt(process.env.durataToken)
     }
     let token = _jwt.sign(payload, ENCRYPTION_KEY)
-    console.log(token);
+    
     return(token);
 
 
@@ -175,7 +175,6 @@ app.use("/api/",(req:any, res:any, next:any)=>{
                 }
                 else{
                     let newToken = creaToken(payload);
-                    console.log(newToken);
                     res.setHeader("authorization",newToken)
                     res.setHeader("access-control-expose-headers","authorization")
                     req["payload"] = payload;
@@ -276,7 +275,6 @@ app.post("/api/recuperaPwd", async(req:any, res:any, next:any) => {
     let mail = req.body.email;
     let passwordLength = 8;
     let randomPassword = generateRandomPassword(passwordLength);
-    console.log(mail);
 
     message = message.replace("__user", mail).replace("__password", randomPassword);
     
@@ -366,7 +364,7 @@ app.post("/api/addUser", async(req:any, res:any, next:any) => {
     let regex = new RegExp("^"+username+"$", "i");
     let rq = collection.findOne({"username":regex});
     rq.then((data)=>{
-        console.log(data);
+        
         if(data){
             res.status(500).send("Username già esistente");
         }else{
