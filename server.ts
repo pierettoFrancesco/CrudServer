@@ -95,8 +95,8 @@ app.use("/", _cors(corsOptions));
 const transporter = _nodemailer.createTransport({
     "service": "gmail",
     "auth": {
-        "user": "f.pieretto.2292@vallauri.edu",
-        "pass": "28/07/2005"
+        "user": process.env.gMailUser,
+        "pass": process.env.gMailPassword
     },
     "tls": {
         "rejectUnauthorized": false
