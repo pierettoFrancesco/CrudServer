@@ -71,7 +71,8 @@ const whitelist = [
     "https://localhost:3001",
     "http://localhost:4200",    
     "http://localhost:8100",
-    "https://pierettofrancesco-crudserver.onrender.com"
+    "https://pierettofrancesco-crudserver.onrender.com",
+    "https://rilievi-perizie-b7a97.web.app"
    ];
 
 const corsOptions = {
