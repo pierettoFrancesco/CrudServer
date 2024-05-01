@@ -281,7 +281,7 @@ app.post("/api/recuperaPwd", async(req:any, res:any, next:any) => {
     message = message.replace("__user", mail).replace("__password", randomPassword);
 
     let mailOptions ={
-        "from": username, 
+        "from": auth.user, 
         "to":mail,
         "subject": "Nuova password di accesso",
         "html": message,
