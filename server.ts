@@ -8,7 +8,6 @@ import _nodemailer from "nodemailer";
 import _bcryptjs from "bcryptjs";
 import _jwt from "jsonwebtoken";
 import _cloudinary, { UploadApiResponse } from "cloudinary";
-import {google} from "googleapis";
 
 _dotenv.config({"path":".env"});
 
@@ -21,7 +20,7 @@ _cloudinary.v2.config({
 
 
 import {MongoClient, ObjectId} from "mongodb";
-import { rejects } from "assert";
+
 const DBNAME = process.env.DBNAME;
 const app = _express();
 const connectionString= process.env.connectionStringAtlas;
@@ -67,11 +66,12 @@ app.use("/", (req:any, res:any, next:any) => {
     next();
 });
 
-/*const whitelist = [
+const whitelist = [
     "http://localhost:3000",
     "https://localhost:3001",
     "http://localhost:4200",    
-    "http://localhost:8100"    
+    "http://localhost:8100",
+    "https://pierettofrancesco-crudserver.onrender.com"
    ];
 
 const corsOptions = {
@@ -88,14 +88,7 @@ const corsOptions = {
     },
     credentials: true
 };
-*/
 
-const corsOptions = {
-    origin: function(origin, callback) {
-        return callback(null, true);
-    },
-    credentials: true
-};
 app.use("/", _cors(corsOptions));
 
 const auth = {
