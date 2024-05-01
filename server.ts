@@ -91,13 +91,13 @@ const corsOptions = {
 
 app.use("/", _cors(corsOptions));
 
-const auth = {
-    "user" : process.env.gmailUser,
-    "pass" : process.env.gmailPassword,
-    }
+
 const transporter = _nodemailer.createTransport({
     "service": "gmail",
-    "auth": auth,
+    "auth": {
+        "user": "f.pieretto.2292@vallauri.edu",
+        "pass": "28/07/2005"
+    },
     "tls": {
         "rejectUnauthorized": false
     }
@@ -279,9 +279,9 @@ app.post("/api/recuperaPwd", async(req:any, res:any, next:any) => {
     console.log(mail);
 
     message = message.replace("__user", mail).replace("__password", randomPassword);
-
+    
     let mailOptions ={
-        "from": auth.user, 
+        "from": username, 
         "to":mail,
         "subject": "Nuova password di accesso",
         "html": message,
