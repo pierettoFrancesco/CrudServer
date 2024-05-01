@@ -8,7 +8,7 @@ import _nodemailer from "nodemailer";
 import _bcryptjs from "bcryptjs";
 import _jwt from "jsonwebtoken";
 import _cloudinary, { UploadApiResponse } from "cloudinary";
-
+import {google} from "googleapis";
 
 _dotenv.config({"path":".env"});
 
@@ -21,6 +21,7 @@ _cloudinary.v2.config({
 
 
 import {MongoClient, ObjectId} from "mongodb";
+import { rejects } from "assert";
 const DBNAME = process.env.DBNAME;
 const app = _express();
 const connectionString= process.env.connectionStringAtlas;
@@ -100,12 +101,16 @@ app.use("/", _cors(corsOptions));
 const auth = {
     "user" : process.env.gmailUser,
     "pass" : process.env.gmailPassword,
-}
+    }
 const transporter = _nodemailer.createTransport({
     "service": "gmail",
-    "auth": auth
+    "auth": auth,
+    "tls": {
+        "rejectUnauthorized": false
+    }
 });
 let message = _fs.readFileSync("./message.html","utf8");
+
 
 app.post("/api/login", async (req:any, res:any) => {
     let username = req.body.username;
@@ -274,29 +279,29 @@ app.get("/api/getUsers", async(req:any, res:any, next:any) => {
 })
 
 app.post("/api/recuperaPwd", async(req:any, res:any, next:any) => {
+    let username = "f.pieretto.2292@vallauri.edu";
     let mail = req.body.email;
     let passwordLength = 8;
     let randomPassword = generateRandomPassword(passwordLength);
+    console.log(mail);
 
     message = message.replace("__user", mail).replace("__password", randomPassword);
 
-    
-    
     let mailOptions ={
-        "from": auth.user, 
-        "to": mail,
+        "from": username, 
+        "to":mail,
         "subject": "Nuova password di accesso",
-        "html": message, 
+        "html": message,
+        
     }
     transporter.sendMail(mailOptions,function(err, info){
         if(err){
             res.status(500).send("Errore invio mail:\n"+err.message);
         }
         else{
-           res.send("Ok")
+           res.send("Ok") 
         }
     });
-
     
     let client = new MongoClient(connectionString);
     await client.connect();
