@@ -66,30 +66,12 @@ app.use("/", (req:any, res:any, next:any) => {
     next();
 });
 
-const whitelist = [
-    "http://localhost:3000",
-    "https://localhost:3001",
-    "http://localhost:4200",    
-    "http://localhost:8100",
-    "https://pierettofrancesco-crudserver.onrender.com",
-    "https://rilievi-perizie-b7a97.web.app"
-   ];
-
 const corsOptions = {
     origin: function(origin, callback) {
-    if (!origin) // browser direct call
-    return callback(null, true);
-    if (whitelist.indexOf(origin) === -1) {
-    var msg = `The CORS policy for this site does not
-    allow access from the specified Origin.`
-    return callback(new Error(msg), false);
-    }
-    else
-    return callback(null, true);
+        return callback(null, true);
     },
     credentials: true
 };
-
 app.use("/", _cors(corsOptions));
 
 
